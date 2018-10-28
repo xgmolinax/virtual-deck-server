@@ -9,8 +9,8 @@ mongoose.connect(process.env.DB_URI);
 require('./models/Session');
 require('./models/Player');
 require('./routes/appRoutes')(app);
-require('./routes/adminSockets')(io);
-require('./routes/sessionSockets')(io);
+require('./routes/sessionManager')(io);
+require('./routes/deckManager')(io);
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT);

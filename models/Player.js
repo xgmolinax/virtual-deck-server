@@ -3,7 +3,6 @@ const { Schema } = mongoose;
 
 const playerSchema = new Schema({
     sessionId: { type: String },
-    number: Number,
     name: String
 });
 
