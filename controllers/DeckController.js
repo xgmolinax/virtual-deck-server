@@ -41,7 +41,7 @@ DeckController.peek = async function(_id, index) {
 
 DeckController.draw = async function(_id, index) {
     const cards = await DeckController.get(_id);
-    const drawedCard = cards.splice(index, 1);
+    const drawedCard = cards.splice(index, 1)[0];
     await DeckController.set(_id, cards);
     return drawedCard;
 };
