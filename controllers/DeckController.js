@@ -23,35 +23,37 @@ DeckController.set = async function(_id, cards) {
     return deck._id;
 };
 
-DeckController.shuffle = function(_id) {
-    let cards = DeckController.get(_id);
+DeckController.shuffle = async function(_id) {
+    let cards = await DeckController.get(_id);
     for (let i = 0; i < cards.length - 1; i++) {
         let j = getRandomInt(i, cards.length - 1);
+        let temp = cards[i];
         cards[i] = cards[j];
+        cards[j] = temp;
     }
-    return DeckController.set(_id, cards);
+    return await DeckController.set(_id, cards);
 };
 
-DeckController.peek = function(_id, index) {
-    const cards = DeckController.get(_id);
+DeckController.peek = async function(_id, index) {
+    const cards = await DeckController.get(_id);
     return cards[index];
 };
 
-DeckController.draw = function(_id, index) {
-    const cards = DeckController.get(_id);
+DeckController.draw = async function(_id, index) {
+    const cards = await DeckController.get(_id);
     const drawedCard = cards.splice(index, 1);
-    DeckController.set(_id, cards);
+    await DeckController.set(_id, cards);
     return drawedCard;
 };
 
-DeckController.put = function(_id, index, card) {
-    const cards = DeckController.get(_id);
+DeckController.put = async function(_id, index, card) {
+    const cards = await DeckController.get(_id);
     cards.splice(index, 0, card);
-    return DeckController.set(_id, cards);
+    return await DeckController.set(_id, cards);
 };
 
-DeckController.count = function(_id) {
-    const cards = DeckController.get(_id);
+DeckController.count = async function(_id) {
+    const cards = await DeckController.get(_id);
     return cards.length;
 };
 

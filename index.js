@@ -6,6 +6,7 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
 mongoose.connect(process.env.DB_URI);
+require('./models/Deck');
 require('./models/Session');
 require('./models/Player');
 require('./routes/appRoutes')(app);
