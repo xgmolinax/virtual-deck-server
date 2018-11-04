@@ -5,8 +5,7 @@ const seatSchema = new Schema({
     playerId: String,
     number: Number,
     state: { type: String, emun: ['empty', 'sitdown', 'sitout'] },
-    cards: [String],
-    cardStates: { type: [String], emun: ['facedown', 'faceup'] }
+    deck: { type: Schema.Types.ObjectId, ref: 'Deck' }
 });
 
 mongoose.model('Seat', seatSchema);
