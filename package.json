@@ -10,7 +10,7 @@
     "scripts": {
         "start": "node index.js",
         "dev": "nodemon index.js",
-        "test": "mocha"
+        "test": "mocha -t 15000"
     },
     "author": "",
     "license": "ISC",
