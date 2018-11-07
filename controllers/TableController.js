@@ -58,10 +58,28 @@ TableController.addSeat = async function(_id, index) {
 };
 
 TableController.removeSeat = async function(_id, index) {
-    let seats = await TableController.getSeats(_id);
-    const removedSeat = seats.splice(index, 1)[0];
+    const table = await Table.findById(_id)
+        .populate('seats')
+        .exec();
+    const removedSeat = table.seats.splice(index, 1)[0];
     await SeatController.remove(removedSeat._id);
+    await table.save();
     return removedSeat._id;
+};
+
+TableController.getDeck = async function(_id) {
+    const table = await Table.findById(_id).exec();
+    return await DeckController.get(table.mainDeck);
+};
+
+TableController.getDeckCommunity = async function(_id) {
+    const table = await Table.findById(_id).exec();
+    return await DeckController.get(table.community);
+};
+
+TableController.getCardsFrom = async function(_id, seatIndex) {
+    const table = await Table.findById(_id).exec();
+    return await SeatController.getCards(table.seats[seatIndex]);
 };
 
 TableController.shuffleDeck = async function(_id) {
@@ -87,7 +105,7 @@ TableController.returnCardToTop = async function(_id, seatIndex, cardIndex) {
 TableController.dealCommunityFromTop = async function(_id) {
     const table = await Table.findById(_id).exec();
     const card = await DeckController.draw(table.mainDeck, 0);
-    return await DeckController.receiveCard(table.community, 0, card);
+    return await DeckController.put(table.community, 0, card);
 };
 
 TableController.giveCard = async function(_id, fromIndex, toIndex, cardIndex) {
@@ -111,7 +129,7 @@ TableController.peekCardFromCommunity = async function(_id, index) {
     return card;
 };
 
-TableController.peekCardFromPlayer = async function(_id, seatIndex, cardIndex) {
+TableController.peekCardFromSeat = async function(_id, seatIndex, cardIndex) {
     const table = await Table.findById(_id).exec();
     const card = await SeatController.peekCard(
         table.seats[seatIndex],

@@ -6,6 +6,9 @@ let tableId;
 let seatNumber = 3;
 let cardNumber = 5;
 let seats;
+let mainDeck;
+let seatCards;
+let communityCards;
 
 describe.only('Table Controller', function() {
     it('Should create new table', async function() {
@@ -34,19 +37,72 @@ describe.only('Table Controller', function() {
         assert.equal(seats.length, seatNumber);
     });
 
-    it('Should shuffleDeck', async function() {});
+    it('Should shuffle main Deck', async function() {
+        await TableController.shuffleDeck(tableId);
+        mainDeck = await TableController.getDeck(tableId);
+        console.log(mainDeck);
+        assert.equal(mainDeck.length, cardNumber);
+    });
 
-    it('Should dealCardFromTop', async function() {});
+    it('Should deal card from top', async function() {
+        await TableController.dealCardFromTop(tableId, 0);
+        mainDeck = await TableController.getDeck(tableId);
+        console.log(mainDeck);
+        assert.equal(mainDeck.length, cardNumber - 1);
 
-    it('Should returnCardToTop', async function() {});
+        seatCards = await TableController.getCardsFrom(tableId, 0);
+        console.log(seatCards);
+        assert.equal(seatCards.length, 1);
+    });
 
-    it('Should dealCommunityFromTop', async function() {});
+    it('Should deal community card from top', async function() {
+        await TableController.dealCommunityFromTop(tableId);
+        mainDeck = await TableController.getDeck(tableId);
+        console.log(mainDeck);
+        assert.equal(mainDeck.length, cardNumber - 2);
 
-    it('Should giveCard', async function() {});
+        communityCards = await TableController.getDeckCommunity(tableId);
+        console.log(communityCards);
+        assert.equal(communityCards.length, 1);
+    });
 
-    it('Should peekCardFromMain', async function() {});
+    it('Should give first card to other', async function() {
+        await TableController.giveCard(tableId, 0, 1, 0);
+        seatCards = await TableController.getCardsFrom(tableId, 0);
+        console.log(seatCards);
+        assert.equal(seatCards.length, 0);
 
-    it('Should peekCardFromCommunity', async function() {});
+        seatCards = await TableController.getCardsFrom(tableId, 1);
+        console.log(seatCards);
+        assert.equal(seatCards.length, 1);
+    });
 
-    it('Should peekCardFromPlayer', async function() {});
+    it('Should peek second card from main', async function() {
+        let card = await TableController.peekCardFromMain(tableId, 1);
+        console.log(card);
+        assert.exists(card);
+    });
+
+    it('Should peek first card from community', async function() {
+        let card = await TableController.peekCardFromCommunity(tableId, 0);
+        console.log(card);
+        assert.exists(card);
+    });
+
+    it('Should peek first card from seat 2', async function() {
+        let card = await TableController.peekCardFromSeat(tableId, 1, 0);
+        console.log(card);
+        assert.exists(card);
+    });
+
+    it('Should return a card to top', async function() {
+        await TableController.returnCardToTop(tableId, 1, 0);
+        mainDeck = await TableController.getDeck(tableId);
+        console.log(mainDeck);
+        assert.equal(mainDeck.length, cardNumber - 1);
+
+        seatCards = await TableController.getCardsFrom(tableId, 1);
+        console.log(seatCards);
+        assert.equal(seatCards.length, 0);
+    });
 });
