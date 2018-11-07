@@ -21,9 +21,32 @@ describe.only('Table Controller', function() {
     });
 
     it('Should add a seat to table', async function() {
-        await TableController.addSeat(tableId, 0);
+        await TableController.addSeat(tableId);
         seats = await TableController.getSeats(tableId);
         console.log(seats.length);
         assert.equal(seats.length, seatNumber + 1);
     });
+
+    it('Should remove a seat from table', async function() {
+        await TableController.removeSeat(tableId, seats.length - 1);
+        seats = await TableController.getSeats(tableId);
+        console.log(seats.length);
+        assert.equal(seats.length, seatNumber);
+    });
+
+    it('Should shuffleDeck', async function() {});
+
+    it('Should dealCardFromTop', async function() {});
+
+    it('Should returnCardToTop', async function() {});
+
+    it('Should dealCommunityFromTop', async function() {});
+
+    it('Should giveCard', async function() {});
+
+    it('Should peekCardFromMain', async function() {});
+
+    it('Should peekCardFromCommunity', async function() {});
+
+    it('Should peekCardFromPlayer', async function() {});
 });
