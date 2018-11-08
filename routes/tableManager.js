@@ -1,6 +1,6 @@
 module.exports = io => {
-    const deck = io.of('/deck');
-    deck.on('connection', async socket => {
+    const table = io.of('/table');
+    table.on('connection', async socket => {
         console.log('user joined table');
         const room = socket.handshake.query.session;
         socket.join(room);

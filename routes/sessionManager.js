@@ -5,8 +5,8 @@ module.exports = io => {
     session.on('connection', socket => {
         console.log('User connected');
 
-        socket.on('create', host => {
-            const sessionId = SessionController.create(host);
+        socket.on('create', (seats, cards) => {
+            const sessionId = SessionController.create(seats, cards);
             sessionId
                 ? socket.emit('createSuccess', sessionId)
                 : socket.emit('createFailed');
