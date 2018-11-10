@@ -11,15 +11,22 @@ SessionController.create = async function(seatCount, cardCount) {
         var sessionId = undefined;
         do {
             sessionId = `${_.sample(data.words)}_${_.sample(data.words)}`;
-        } while ((await Session.count({ sessionId }).exec()) > 0);
+        } while (await Session.findOne({ sessionId }).exec());
         await new Session({
             sessionId,
-            table: TableController.new(seatCount, cardCount)
+            table: await TableController.new(seatCount, cardCount)
         }).save();
         return sessionId;
     } catch (error) {
         console.log(error);
     }
+};
+
+SessionController.getState = async function(sessionId) {
+    const session = await Session.findOne({ sessionId })
+        .populate('table')
+        .exec();
+    return session;
 };
 
 module.exports = SessionController;

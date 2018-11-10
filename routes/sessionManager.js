@@ -5,11 +5,14 @@ module.exports = io => {
     session.on('connection', socket => {
         console.log('User connected');
 
-        socket.on('create', (seats, cards) => {
-            const sessionId = SessionController.create(seats, cards);
-            sessionId
-                ? socket.emit('createSuccess', sessionId)
-                : socket.emit('createFailed');
+        socket.on('create', async (seats, cards) => {
+            const sessionId = await SessionController.create(seats, cards);
+            const table = await SessionController.getState(sessionId);
+            const payload = {
+                sessionId,
+                table
+            };
+            socket.emit('createResponse', payload);
         });
 
         socket.on('disconnect', () => {

@@ -5,7 +5,10 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
-mongoose.connect(process.env.DB_URI);
+mongoose.connect(
+    process.env.DB_URI,
+    { useNewUrlParser: true }
+);
 require('./models/Deck');
 require('./models/Player');
 require('./models/Seat');
