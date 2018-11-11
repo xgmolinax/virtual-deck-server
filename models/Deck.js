@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const deckSchema = new Schema({
-    cards: [String],
+    cards: [Number],
     state: { type: String, emun: ['facedown', 'faceup'] }
 });
 

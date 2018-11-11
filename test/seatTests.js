@@ -24,7 +24,7 @@ describe('Seat Controller', function() {
     });
 
     it('Should insert a card on top', async function() {
-        await SeatController.receiveCard(seatId, 0, 'K');
+        await SeatController.receiveCard(seatId, 0, 11);
         cards = await SeatController.getCards(seatId);
         console.log(cards);
         count = await SeatController.count(seatId);

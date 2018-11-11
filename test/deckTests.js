@@ -59,7 +59,7 @@ describe('Deck Controller', function() {
     });
 
     it('Should insert a card on top', async function() {
-        await DeckController.put(deckId, 0, 'K');
+        await DeckController.put(deckId, 0, 11);
         count = await DeckController.count(deckId);
         unsortedDeck = await DeckController.get(deckId);
         console.log(unsortedDeck);

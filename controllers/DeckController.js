@@ -8,7 +8,8 @@ function getRandomInt(min, max) {
 var DeckController = {};
 
 DeckController.new = async function(cardCount) {
-    const cards = [...Array(cardCount).keys()];
+    let cards = [...Array(cardCount).keys()];
+    cards = cards.map(card => card + 1);
     const deck = await new Deck({ cards }).save();
     return deck._id;
 };

@@ -22,7 +22,7 @@ SessionController.create = async function(seatCount, cardCount) {
     }
 };
 
-SessionController.getState = async function(sessionId) {
+SessionController.getSession = async function(sessionId) {
     const session = await Session.findOne({ sessionId })
         .populate('table')
         .exec();
