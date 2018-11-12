@@ -9,6 +9,7 @@ mongoose.connect(
     process.env.DB_URI,
     { useNewUrlParser: true }
 );
+require('./models/Card');
 require('./models/Deck');
 require('./models/Player');
 require('./models/Seat');

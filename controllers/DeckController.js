@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Deck = mongoose.model('Deck');
+const CardController = require('../controllers/CardController');
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -8,54 +9,59 @@ function getRandomInt(min, max) {
 var DeckController = {};
 
 DeckController.new = async function(cardCount) {
-    let cards = [...Array(cardCount).keys()];
-    cards = cards.map(card => card + 1);
+    let cards = [...Array(cardCount).keys()].map(async n => {
+        const card = await CardController.new(n + 1, n + 1, 'facedown');
+        return card._id;
+    });
+    cards = await Promise.all(cards);
     const deck = await new Deck({ cards }).save();
-    return deck._id;
+    return deck;
 };
 
 DeckController.get = async function(_id) {
-    const deck = await Deck.findById(_id).exec();
-    return deck.cards;
+    const deck = await Deck.findById(_id)
+        .populate('cards')
+        .exec();
+    return deck;
 };
 
 DeckController.set = async function(_id, cards) {
     const deck = await Deck.findByIdAndUpdate(_id, { cards }).exec();
-    return deck._id;
+    return deck;
 };
 
 DeckController.shuffle = async function(_id) {
-    let cards = await DeckController.get(_id);
-    for (let i = 0; i < cards.length - 1; i++) {
-        let j = getRandomInt(i, cards.length - 1);
-        let temp = cards[i];
-        cards[i] = cards[j];
-        cards[j] = temp;
+    let deck = await DeckController.get(_id);
+    for (let i = 0; i < deck.cards.length - 1; i++) {
+        let j = getRandomInt(i, deck.cards.length - 1);
+        let temp = deck.cards[i];
+        deck.cards[i] = deck.cards[j];
+        deck.cards[j] = temp;
     }
-    return await DeckController.set(_id, cards);
+    return await DeckController.set(_id, deck.cards);
 };
 
 DeckController.peek = async function(_id, index) {
-    const cards = await DeckController.get(_id);
-    return cards[index];
+    const deck = await DeckController.get(_id);
+    return deck.cards[index];
 };
 
 DeckController.draw = async function(_id, index) {
-    const cards = await DeckController.get(_id);
-    const drawedCard = cards.splice(index, 1)[0];
-    await DeckController.set(_id, cards);
+    const deck = await DeckController.get(_id);
+    const drawedCard = deck.cards.splice(index, 1)[0];
+    await deck.save();
     return drawedCard;
 };
 
 DeckController.put = async function(_id, index, card) {
-    const cards = await DeckController.get(_id);
-    cards.splice(index, 0, card);
-    return await DeckController.set(_id, cards);
+    const deck = await DeckController.get(_id);
+    deck.cards.splice(index, 0, card);
+    return await deck.save();
 };
 
 DeckController.count = async function(_id) {
-    const cards = await DeckController.get(_id);
-    return cards.length;
+    const deck = await DeckController.get(_id);
+    return deck.cards.length;
 };
 
 module.exports = DeckController;

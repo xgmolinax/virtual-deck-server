@@ -4,67 +4,54 @@ const DeckController = require('../controllers/DeckController');
 
 var SeatController = {};
 
-SeatController.new = async function(number, cardCount) {
+SeatController.new = async function(cardCount) {
+    const deck = await DeckController.new(cardCount);
     const seat = await new Seat({
-        number,
         state: 'empty',
-        deck: await DeckController.new(cardCount)
+        deck: deck
     }).save();
     return seat._id;
 };
 
+SeatController.get = async function(_id) {
+    const seat = await Seat.findById(_id)
+        .populate({ path: 'deck', populate: { path: 'cards' } })
+        .exec();
+    return seat;
+};
+
+SeatController.set = async function(_id, playerId, state, deck) {
+    const seat = await Seat.findByIdAndUpdate(_id, {
+        playerId,
+        state,
+        deck
+    }).exec();
+    return seat;
+};
+
 SeatController.remove = async function(_id) {
     const seat = await Seat.findByIdAndDelete(_id).exec();
-    return seat._id;
-};
-
-SeatController.changeState = async function(_id, state) {
-    const seat = await Seat.findByIdAndUpdate(_id, { state }).exec();
-    return seat._id;
-};
-
-SeatController.sitPlayer = async function(_id, playerId, state) {
-    const seat = await Seat.findByIdAndUpdate(_id, { playerId, state }).exec();
-    return seat._id;
-};
-
-SeatController.getCards = async function(_id) {
-    const seat = await Seat.findById(_id)
-        .populate('deck')
-        .exec();
-    return seat.deck.cards;
-};
-
-SeatController.setCards = async function(_id, cards) {
-    let seat = await Seat.findById(_id)
-        .populate('deck')
-        .exec();
-    seat.deck.cards = cards;
-    await seat.deck.save();
-    return seat._id;
+    return seat;
 };
 
 SeatController.receiveCard = async function(_id, index, card) {
-    const cards = await SeatController.getCards(_id);
-    cards.splice(index, 0, card);
-    return await SeatController.setCards(_id, cards);
+    const seat = await SeatController.get(_id);
+    return await DeckController.put(seat.deck._id, index, card);
 };
 
 SeatController.giveCard = async function(_id, index) {
-    const cards = await SeatController.getCards(_id);
-    const removedCard = cards.splice(index, 1)[0];
-    await SeatController.setCards(_id, cards);
-    return removedCard;
+    const seat = await SeatController.get(_id);
+    return await DeckController.draw(seat.deck._id, index);
 };
 
 SeatController.peekCard = async function(_id, index) {
-    const cards = await SeatController.getCards(_id);
-    return cards[index];
+    const seat = await SeatController.get(_id);
+    return await DeckController.peek(seat.deck._id, index);
 };
 
-SeatController.count = async function(_id) {
-    const cards = await SeatController.getCards(_id);
-    return cards.length;
+SeatController.countCards = async function(_id) {
+    const seat = await SeatController.get(_id);
+    return seat.deck.cards.length;
 };
 
 module.exports = SeatController;

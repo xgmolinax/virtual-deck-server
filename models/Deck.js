@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const deckSchema = new Schema({
-    cards: [Number],
-    state: { type: String, emun: ['facedown', 'faceup'] }
+    cards: [{ type: Schema.Types.ObjectId, ref: 'Card' }]
 });
 
 mongoose.model('Deck', deckSchema);

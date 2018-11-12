@@ -7,7 +7,7 @@ module.exports = io => {
 
         socket.on('create', async (seats, cards) => {
             const sessionId = await SessionController.create(seats, cards);
-            const session = await SessionController.getSession(sessionId);
+            const session = await SessionController.get(sessionId);
             socket.emit('createResponse', session);
         });
 
