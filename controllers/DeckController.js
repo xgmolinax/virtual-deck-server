@@ -64,4 +64,12 @@ DeckController.count = async function(_id) {
     return deck.cards.length;
 };
 
+DeckController.getMasked = function(deck) {
+    const maskedDeck = {
+        ...deck,
+        cards: deck.cards.map(card => CardController.getMasked(card))
+    };
+    return maskedDeck;
+};
+
 module.exports = DeckController;

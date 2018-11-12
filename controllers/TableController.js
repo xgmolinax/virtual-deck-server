@@ -19,7 +19,10 @@ TableController.new = async function(seatCount, cardCount) {
 
 TableController.get = async function(_id) {
     const table = await Table.findById(_id)
-        .populate({ path: 'seats', populate: { path: 'deck' } })
+        .populate({
+            path: 'seats',
+            populate: { path: 'deck', populate: { path: 'cards' } }
+        })
         .populate({ path: 'mainDeck', populate: { path: 'cards' } })
         .populate({ path: 'community', populate: { path: 'cards' } })
         .exec();
@@ -47,6 +50,23 @@ TableController.set = async function(
 TableController.remove = async function(_id) {
     const table = await Table.findByIdAndDelete(_id).exec();
     return table;
+};
+
+TableController.getMasked = async function(_id, exceptSeatIndex) {
+    const table = await TableController.get(_id);
+    let maskedTable = {};
+    maskedTable.seats = table.seats.map((seat, i) => {
+        return {
+            ...seat,
+            deck:
+                i === exceptSeatIndex
+                    ? seat.deck
+                    : DeckController.getMasked(seat.deck)
+        };
+    });
+    maskedTable.mainDeck = DeckController.getMasked(table.mainDeck);
+    maskedTable.community = DeckController.getMasked(table.community);
+    return maskedTable;
 };
 
 TableController.getSeats = async function(_id) {

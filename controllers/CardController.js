@@ -20,4 +20,13 @@ CardController.set = async function(_id, state) {
     return card;
 };
 
+CardController.getMasked = function(card) {
+    const maskedCard = {
+        ...card,
+        face: card.state === 'facedown' ? 0 : card.face,
+        value: card.state === 'facedown' ? 0 : card.value
+    };
+    return maskedCard;
+};
+
 module.exports = CardController;

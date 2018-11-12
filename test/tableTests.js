@@ -10,10 +10,16 @@ let mainDeck;
 let seatDeck;
 let communityCards;
 
-const consoleDeck = deck => console.log(deck.cards.map(card => card.face));
 const consoleCard = card => console.log(card.face);
+const consoleDeck = deck => console.log(deck.cards.map(card => card.face));
+const consoleSeat = seat => console.log(seat.deck.cards.map(card => card.face));
+const consoleTable = table => {
+    consoleDeck(table.mainDeck);
+    consoleDeck(table.community);
+    table.seats.map(seat => consoleSeat(seat));
+};
 
-describe('Table Controller', function() {
+describe.only('Table Controller', function() {
     it('Should create new table', async function() {
         tableId = await TableController.new(seatNumber, cardNumber);
         console.log(tableId);
@@ -96,6 +102,17 @@ describe('Table Controller', function() {
         let card = await TableController.peekCardFromSeat(tableId, 1, 0);
         consoleCard(card);
         assert.exists(card);
+    });
+
+    it('Should get masked table for seat 1', async function() {
+        const table = await TableController.get(tableId);
+        const maskedTable = await TableController.getMasked(tableId, 1);
+        console.log('TABLE: ');
+        consoleTable(table);
+        console.log('MASKED: ');
+        consoleTable(maskedTable);
+        assert.exists(table);
+        assert.exists(maskedTable);
     });
 
     it('Should return a card to top', async function() {

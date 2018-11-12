@@ -12,7 +12,7 @@ const socketURL = 'http://localhost:5000';
 let socket;
 let session;
 
-describe.only('Socket Tests', function() {
+describe('Socket Tests', function() {
     describe('Session Manager', function() {
         before(function(done) {
             socket = io(`${socketURL}/session`, ioOptions);
