@@ -22,7 +22,7 @@ CardController.set = async function(_id, state) {
 
 CardController.getMasked = function(card) {
     const maskedCard = {
-        ...card,
+        ...card.toObject(),
         face: card.state === 'facedown' ? 0 : card.face,
         value: card.state === 'facedown' ? 0 : card.value
     };

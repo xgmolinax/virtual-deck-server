@@ -54,18 +54,18 @@ TableController.remove = async function(_id) {
 
 TableController.getMasked = async function(_id, exceptSeatIndex) {
     const table = await TableController.get(_id);
-    let maskedTable = {};
-    maskedTable.seats = table.seats.map((seat, i) => {
-        return {
-            ...seat,
+    const maskedTable = {
+        seats: table.seats.map((seat, i) => ({
+            ...seat.toObject(),
             deck:
                 i === exceptSeatIndex
                     ? seat.deck
                     : DeckController.getMasked(seat.deck)
-        };
-    });
-    maskedTable.mainDeck = DeckController.getMasked(table.mainDeck);
-    maskedTable.community = DeckController.getMasked(table.community);
+        })),
+        mainDeck: DeckController.getMasked(table.mainDeck),
+        community: DeckController.getMasked(table.community)
+    };
+
     return maskedTable;
 };
 

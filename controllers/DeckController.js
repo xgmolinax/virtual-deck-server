@@ -66,7 +66,7 @@ DeckController.count = async function(_id) {
 
 DeckController.getMasked = function(deck) {
     const maskedDeck = {
-        ...deck,
+        ...deck.toObject(),
         cards: deck.cards.map(card => CardController.getMasked(card))
     };
     return maskedDeck;

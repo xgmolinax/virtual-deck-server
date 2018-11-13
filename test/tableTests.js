@@ -19,7 +19,7 @@ const consoleTable = table => {
     table.seats.map(seat => consoleSeat(seat));
 };
 
-describe.only('Table Controller', function() {
+describe('Table Controller', function() {
     it('Should create new table', async function() {
         tableId = await TableController.new(seatNumber, cardNumber);
         console.log(tableId);
