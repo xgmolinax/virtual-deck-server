@@ -1,4 +1,4 @@
-require('dotenv').config();
+const config = require('./config');
 const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
@@ -6,9 +6,11 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
 mongoose.connect(
-    process.env.DB_URI,
+    config.DB_URI,
     { useNewUrlParser: true }
 );
+mongoose.set('useFindAndModify', false);
+
 require('./models/Card');
 require('./models/Deck');
 require('./models/Player');
@@ -19,6 +21,6 @@ require('./routes/appRoutes')(app);
 require('./routes/sessionManager')(io);
 require('./routes/tableManager')(io);
 
-// const PORT = process.env.PORT || 5000;
-const PORT = 5000;
-server.listen(PORT);
+server.listen(config.PORT, () => {
+    console.log(`Started on port ${server.address().port}`);
+});

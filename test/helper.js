@@ -1,9 +1,9 @@
-require('dotenv').config();
+const config = require('../config');
 const mongoose = require('mongoose');
 
 before(function() {
     mongoose.connect(
-        process.env.DB_URI,
+        config.DB_URI,
         { useNewUrlParser: true }
     );
     mongoose.set('useFindAndModify', false);
