@@ -1,8 +1,7 @@
 const _ = require('lodash');
-const mongoose = require('mongoose');
 const data = require('../db/data.json');
-const Session = mongoose.model('Session');
-const TableController = require('../controllers/TableController');
+const Session = require('../models/Session.model');
+const TableController = require('./Table.controller');
 
 var SessionController = {};
 

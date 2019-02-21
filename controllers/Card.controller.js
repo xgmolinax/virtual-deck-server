@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-const Card = mongoose.model('Card');
+const Card = require('../models/Card.model');
 
 var CardController = {};
 

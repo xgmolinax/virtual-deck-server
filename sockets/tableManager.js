@@ -1,4 +1,4 @@
-const TableController = require('../controllers/TableController');
+const TableController = require('../controllers/Table.controller');
 
 module.exports = io => {
     const tableIo = io.of('/table');

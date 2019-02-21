@@ -1,8 +1,8 @@
 const assert = require('chai').assert;
-require('../models/Card');
-require('../models/Deck');
-const CardController = require('../controllers/CardController');
-const DeckController = require('../controllers/DeckController');
+require('../models/Card.model');
+require('../models/Deck.model');
+const CardController = require('../controllers/Card.controller');
+const DeckController = require('../controllers/Deck.controller');
 
 const cardNumber = 10;
 let deckId;

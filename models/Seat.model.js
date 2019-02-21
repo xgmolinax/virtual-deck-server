@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const seatSchema = new Schema({
+const SeatSchema = new Schema({
     playerId: String,
     state: { type: String, emun: ['empty', 'sitdown', 'sitout'] },
     deck: { type: Schema.Types.ObjectId, ref: 'Deck' }
 });
 
-mongoose.model('Seat', seatSchema);
+module.exports = mongoose.model('Seat', SeatSchema);

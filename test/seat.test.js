@@ -1,7 +1,7 @@
 const assert = require('chai').assert;
-require('../models/Seat');
-const CardController = require('../controllers/CardController');
-const SeatController = require('../controllers/SeatController');
+require('../models/Seat.model');
+const CardController = require('../controllers/Card.controller');
+const SeatController = require('../controllers/Seat.controller');
 
 let seatId;
 let seat;

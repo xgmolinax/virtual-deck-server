@@ -1,6 +1,5 @@
-const mongoose = require('mongoose');
-const Deck = mongoose.model('Deck');
-const CardController = require('../controllers/CardController');
+const Deck = require('../models/Deck.model');
+const CardController = require('./Card.controller');
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;

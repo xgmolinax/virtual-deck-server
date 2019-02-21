@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const tableSchema = new Schema({
+const TableSchema = new Schema({
     sessionId: String,
     adminId: String,
     state: { type: String, emun: ['active', 'idle'] },
@@ -10,4 +10,4 @@ const tableSchema = new Schema({
     community: { type: Schema.Types.ObjectId, ref: 'Deck' }
 });
 
-mongoose.model('Table', tableSchema);
+module.exports = mongoose.model('Table', TableSchema);

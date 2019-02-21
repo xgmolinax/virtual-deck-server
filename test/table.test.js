@@ -1,6 +1,6 @@
 const assert = require('chai').assert;
-require('../models/Table');
-const TableController = require('../controllers/TableController');
+require('../models/Table.model');
+const TableController = require('../controllers/Table.controller');
 
 let tableId;
 let seatNumber = 3;

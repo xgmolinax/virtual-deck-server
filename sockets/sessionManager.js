@@ -1,4 +1,4 @@
-const SessionController = require('../controllers/SessionController');
+const SessionController = require('../controllers/Session.controller');
 
 module.exports = io => {
     const session = io.of('/session');

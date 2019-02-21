@@ -1,7 +1,6 @@
-const mongoose = require('mongoose');
-const Table = mongoose.model('Table');
-const DeckController = require('../controllers/DeckController');
-const SeatController = require('../controllers/SeatController');
+const Table = require('../models/Table.model');
+const DeckController = require('./Deck.controller');
+const SeatController = require('./Seat.controller');
 
 var TableController = {};
 
